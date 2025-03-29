@@ -1,0 +1,7 @@
+.bg-gradient {
+    background: linear-gradient(to right, #4facfe, #00f2fe); /* Blue gradient */
+    padding: 40px;
+    border-radius: 10px;
+    color: white;
+    min-height: 100vh; /* Ensure it covers the full screen height */
+}
