@@ -13,6 +13,7 @@ use App\Http\Controllers\GadgetRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DepartmentManagerController;
 
+
 use App\Http\Controllers\IssueController;
 
 
@@ -57,6 +58,10 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
 
     Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
+
+    Route::get('/admin/manager-requests', [AdminController::class, 'managerRequests'])->name('admin.manager_requests.manager.requests');
+    Route::get('/admin/manager-allocations', [AdminController::class, 'managerAllocations'])->name('admin.manager_requests.manager.allocations');
+    Route::get('/admin/manager-issues', [AdminController::class, 'managerIssues'])->name('admin.manager_requests.manager.issues');
 
 
     Route::get('/admin/employees/{id}/assing-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
@@ -130,14 +135,22 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::post('/admin/requests/{id}/cancel', [RequestController::class, 'cancel'])->name('admin.requests.cancel');
     Route::post('/admin/requests/{id}/return', [RequestController::class, 'returnGadget'])->name('admin.requests.return');
     Route::post('/admin/requests/{id}/report-issue', [RequestController::class, 'reportIssue'])->name('admin.requests.reportIssue');
-    Route::get('/admin/requests/{id}', [RequestController::class, 'show'])->name('admin.requests.show');
-    Route::get('/admin/requests/{id}/edit', [RequestController::class, 'edit'])->name('admin.requests.edit');
-    Route::put('/admin/requests/{id}', [RequestController::class, 'update'])->name('admin.requests.update');
-    Route::delete('/admin/requests/{id}', [RequestController::class, 'destroy'])->name('admin.requests.destroy');
-    Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-    Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
+    //Route::get('/admin/requests/{id}', [RequestController::class, 'show'])->name('admin.requests.show');
+   // Route::get('/admin/requests/{id}/edit', [RequestController::class, 'edit'])->name('admin.requests.edit');
+    //Route::put('/admin/requests/{id}', [RequestController::class, 'update'])->name('admin.requests.update');
+    //Route::delete('/admin/requests/{id}', [RequestController::class, 'destroy'])->name('admin.requests.destroy');
+    //Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
+    //Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
+    //Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
+    //Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
+// routes/web.php
+
+/*Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/manager-requests', [AdminController::class, 'managerRequests'])->name('admin.manager_requests.manager.requests');
+    Route::get('/admin/manager-allocations', [AdminController::class, 'managerAllocations'])->name('admin.manager_requests.manager.allocations');
+    Route::get('/admin/manager-issues', [AdminController::class, 'managerIssues'])->name('admin.manager_requests.manager.issues');
+});
+*/
 
     Route::get('/admin/gadget-requests', [GadgetRequestController::class, 'adminIndex'])->name('admin.gadget_requests.index');
     Route::put('/admin/gadget-requests/{id}', [GadgetRequestController::class, 'adminUpdate'])->name('admin.gadget_requests.update');

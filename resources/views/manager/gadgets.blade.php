@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gadgets List</title>
+    <title>Manager Gadget Requests</title>
 </head>
 <body>
-    <h1>Gadgets in Your Department</h1>
+    <h1>Manager Gadget Requests</h1>
+
     @if($gadgets->isEmpty())
-        <p>No gadgets found in your department.</p>
+        <p>No gadgets found.</p>
     @else
         <table border="1">
             <tr>
@@ -29,5 +30,6 @@
             @endforeach
         </table>
     @endif
+
 </body>
 </html>

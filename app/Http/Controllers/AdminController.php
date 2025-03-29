@@ -10,6 +10,7 @@ use App\Models\Gadget;
 use App\Models\Allocation;
 use App\Models\Issue;
 
+
 //use Illuminate\Http\Request;
 //use App\Models\Gadget; // Import Gadget model
 //use App\Models\User;   // Import User model
@@ -462,4 +463,33 @@ public function showUserRequests($id)
 
     return view('admin.user-requests', compact('user', 'requests'));
 }
+
+
+public function managerRequests()
+{
+    $gadgets = GadgetRequest::whereHas('user', function($query) {
+        $query->where('role', 'manager');
+    })->get();
+
+    return view('admin.manager_requests.manager_requests', compact('gadgets'));
+}
+
+
+
+    public function managerAllocations()
+    {
+        $managerAllocations = Allocation::whereHas('user', function($query) {
+            $query->where('role', 'manager');
+        })->get();
+        return view('admin.manager_requests.manager_allocations', compact('managerAllocations'));
+    }
+
+    public function managerIssues()
+    {
+        $managerIssues = Issue::whereHas('user', function($query) {
+            $query->where('role', 'manager');
+        })->get();
+        return view('admin.manager_requests.manager_issues', compact('managerIssues'));
+    }
+
 }

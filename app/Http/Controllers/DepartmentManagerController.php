@@ -44,4 +44,11 @@ class DepartmentManagerController extends Controller
     
         return view('manager.allocations', compact('allocations'));
     }
+    public function managerRequests()
+{
+    $gadgets = GadgetRequest::all();
+    dd($gadgets); // Check what gadgets data is being retrieved
+    return view('admin.manager_requests.manager_requests', compact('gadgets'));
+}
+
 }
