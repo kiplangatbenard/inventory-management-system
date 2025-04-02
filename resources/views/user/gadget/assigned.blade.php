@@ -1,46 +1,43 @@
-@extends('layouts.user')
+@extends('user.layout')
 
 @section('content')
 
-<main class="container mt-4">
-    <h2><i class="bi bi-arrow-return-left"></i> Return Gadget</h2>
-
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+<section id="gadget-details" class="my-4">
+    <h2 style="font-size: 2rem;">
+        <a href="{{ url()->previous() }}" class="text-white text-decoration-none">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <i class="bi bi-info-circle-fill"></i> Gadget Details
+    </h2>
 
     <div class="card bg-dark text-white shadow">
         <div class="card-body">
-            <form action="{{ route('gadget.return') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="gadget_id" class="form-label">
-                        <i class="bi bi-laptop"></i> Select Gadget to Return
-                    </label>
-                    <select class="form-control" id="gadget_id" name="gadget_id" required>
-                        @if($assignedGadgets->isEmpty())
-                            <option disabled>No gadgets available for return</option>
-                        @else
-                            @foreach ($assignedGadgets as $gadget)
-                                <option value="{{ $gadget->id }}">{{ $gadget->name }} ({{ $gadget->serial_number }})</option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="return_reason" class="form-label">
-                        <i class="bi bi-chat-left-text"></i> Reason for Return
-                    </label>
-                    <textarea class="form-control" id="return_reason" name="return_reason" placeholder="Why are you returning this gadget?" required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-warning">
-                    <i class="bi bi-arrow-return-left"></i> Request Return
-                </button>
-            </form>
+            @if ($assignedGadgets->isNotEmpty())
+                <table class="table table-dark table-striped table-hover text-center" style="font-size: 1.25rem;">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-laptop"></i> Gadget Name</th>
+                            <th><i class="bi bi-upc-scan"></i> Serial Number</th>
+                            <th><i class="bi bi-shield-check"></i> Condition</th>
+                            <th><i class="bi bi-info-circle"></i> Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($assignedGadgets as $gadget)
+                            <tr>
+                                <td>{{ $gadget->name }}</td>
+                                <td>{{ $gadget->serial_number }}</td>
+                                <td>{{ ucfirst($gadget->condition) }}</td>
+                                <td>{{ ucfirst($gadget->status) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+                <p style="font-size: 1.5rem;">No gadgets assigned.</p>
+            @endif
         </div>
     </div>
-</main>
+</section>
 
 @endsection

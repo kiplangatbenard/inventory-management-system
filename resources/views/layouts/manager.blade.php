@@ -25,7 +25,7 @@
     }
     .sidebar {
         height: 100vh;
-        width: 250px;
+        width: 225px;
         position: fixed;
         top: 0;
         left: 0;
@@ -49,7 +49,7 @@
         background-color: #495057;
     }
     .content {
-        margin-left: 250px;
+        margin-left: 225px;
         padding: 25px;
     }
     .navbar {
@@ -86,11 +86,11 @@
         <div class="sidebar">
     <h4 class="text-white text-center">Manager's Dashboard</h4>
     <a href="#"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a class="nav-link" href="#">Request Gadget</a>
-    <a class="nav-link" href="#">View Gadgets</a>
-    <a class="nav-link" href="#">View Allocations</a>
-    <a class="nav-link" href="#">Report Issues</a>
-    <a class="nav-link" href="#">view Employees</a>
+    <a class="nav-link" href="{{ route('manager.requestGadget') }}">Request Gadget</a>
+    <a class="nav-link" href="{{ route('manager.gadgets') }}">View Gadgets</a>
+    <a class="nav-link" href="{{ route('manager.allocations') }}">View Allocations</a>
+    <a class="nav-link" href="{{ route('manager.reportIssue') }}">Report Issues</a>
+    <a class="nav-link" href="{{route('manager.viewEmployees')}}">view Employees</a>
     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="bi bi-box-arrow-right"></i> Logout
     </a>

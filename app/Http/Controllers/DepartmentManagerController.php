@@ -51,4 +51,5 @@ class DepartmentManagerController extends Controller
     return view('admin.manager_requests.manager_requests', compact('gadgets'));
 }
 
+
 }

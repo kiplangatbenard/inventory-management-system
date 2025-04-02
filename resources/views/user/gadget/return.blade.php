@@ -10,7 +10,9 @@
 
     <div class="card bg-dark text-white shadow">
         <div class="card-body">
-        <form action="{{ route('gadget.return', ['id' => $gadget->id]) }}" method="POST">                @csrf
+        <form action="{{ route('user.gadget.return') }}" method="POST">
+
+
                 <div class="mb-3">
                     <label for="gadget_id" class="form-label"><i class="bi bi-laptop"></i> Select Gadget to Return</label>
                     <select class="form-control" id="gadget_id" name="gadget_id" required>

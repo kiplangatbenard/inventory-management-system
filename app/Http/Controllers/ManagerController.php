@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gadget;
 use App\Models\GadgetRequest;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 
 class ManagerController extends Controller
@@ -18,7 +19,14 @@ class ManagerController extends Controller
 
         return view('manager.dashboard', compact('gadgets'));
     }
-
+    public function employees()
+    {
+        // Retrieve all users with their gadgets (using Eager Loading)
+        $users = User::with('gadgets')->get();
+    
+        return view('manager.employees', compact('users'));
+    }
+    
     // Request Additional Gadget
     public function requestGadget(Request $request)
     {
@@ -79,6 +87,11 @@ class ManagerController extends Controller
 
     return view('manager.employees', compact('employees', 'department'));
 }
+public function viewGadgets()
+{
+    $gadgets = Gadget::all();
 
+    return view('manager.viewGadgets', compact('gadgets'));
+}
 
 }

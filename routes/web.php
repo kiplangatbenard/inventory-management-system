@@ -10,7 +10,6 @@ use App\Http\Controllers\RequestController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\GadgetRequestController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DepartmentManagerController;
 
 
@@ -49,7 +48,6 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::get('/admin/departments/{id}', [AdminController::class, 'viewDepartment'])->name('admin.viewDepartment');
     Route::post('/admin/departments/{id}/update', [AdminController::class, 'updateDepartment'])->name('admin.updateDepartment');
     Route::post('/admin/departments/{id}/delete', [AdminController::class, 'deleteDepartment'])->name('admin.deleteDepartment');
-    //Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
 
     Route::get('/admin/pending-requests', [AdminController::class, 'getPendingRequests'])->name('admin.pendingRequests');
     Route::get('/admin/pending-requests/{id}', [AdminController::class, 'getPendingRequest'])->name('admin.pendingRequest');
@@ -106,10 +104,6 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::post('/admin/process-return/{id}', [AdminController::class, 'processReturn'])->name('admin.processReturn');
 
 
-    // User Management Routes
-   //Route::resource('user', UserController::class)->except(['show']); // Exclude 'show' if not needed
-    //Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show'); // Define 'show' separately if needed
-
     Route::post('user/requests/{id}/report-issue', [UserController::class, 'reportIssue'])->name('user.reportIssue');
     
     Route::get('user/requests/{id}/return', [UserController::class, 'returnGadget'])->name('user.returnGadget');
@@ -135,22 +129,7 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::post('/admin/requests/{id}/cancel', [RequestController::class, 'cancel'])->name('admin.requests.cancel');
     Route::post('/admin/requests/{id}/return', [RequestController::class, 'returnGadget'])->name('admin.requests.return');
     Route::post('/admin/requests/{id}/report-issue', [RequestController::class, 'reportIssue'])->name('admin.requests.reportIssue');
-    //Route::get('/admin/requests/{id}', [RequestController::class, 'show'])->name('admin.requests.show');
-   // Route::get('/admin/requests/{id}/edit', [RequestController::class, 'edit'])->name('admin.requests.edit');
-    //Route::put('/admin/requests/{id}', [RequestController::class, 'update'])->name('admin.requests.update');
-    //Route::delete('/admin/requests/{id}', [RequestController::class, 'destroy'])->name('admin.requests.destroy');
-    //Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-    //Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    //Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    //Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-// routes/web.php
 
-/*Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/manager-requests', [AdminController::class, 'managerRequests'])->name('admin.manager_requests.manager.requests');
-    Route::get('/admin/manager-allocations', [AdminController::class, 'managerAllocations'])->name('admin.manager_requests.manager.allocations');
-    Route::get('/admin/manager-issues', [AdminController::class, 'managerIssues'])->name('admin.manager_requests.manager.issues');
-});
-*/
 
     Route::get('/admin/gadget-requests', [GadgetRequestController::class, 'adminIndex'])->name('admin.gadget_requests.index');
     Route::put('/admin/gadget-requests/{id}', [GadgetRequestController::class, 'adminUpdate'])->name('admin.gadget_requests.update');
@@ -230,13 +209,11 @@ Route::middleware(['auth'])->group(function () {
     // Requests and Returns
     Route::post('user/report-issue', [UserController::class, 'reportIssue'])->name('user.reportIssue');
     Route::get('user/requests/{id}/return', [UserController::class, 'returnGadget'])->name('user.returnGadget');
-    //Route::get('user/return-gadget', [UserController::class, 'requestReturn'])->name('user.gadget.returnGadget');
-    //Route::post('user/return-gadget', [UserController::class, 'requestReturn'])->name('user.gadget.returnGadget');
     Route::post('user/requests/{id}/return', [UserController::class, 'returnGadget'])->name('user.gadget.returnGadget');
     Route::post('user/requests/{id}/report-issue', [UserController::class, 'reportIssue'])->name('user.reportIssue');
    
-    //Route::post('/user/requests/{id}/return', [UserController::class, 'returnGadget'])->name('user.returnGadget');
-    
+    Route::get('/user/requests', [UserController::class, 'viewRequests'])->name('user.viewRequests');
+    Route::get('/user/requests/{id}', [UserController::class, 'viewRequest'])->name('user.viewRequest');    
     Route::post('/user/requests/{id}/report-issue', [UserController::class, 'reportIssue'])->name('user.reportIssue');
     Route::get('/user/requests', [UserController::class, 'viewRequests'])->name('user.viewRequests');
     Route::get('/user/requests/{id}', [UserController::class, 'viewRequest'])->name('user.viewRequest');
@@ -261,6 +238,9 @@ Route::get('/assigned', [GadgetController::class, 'assignedGadgets'])->name('use
 Route::get('/user/gadget/return', [GadgetController::class, 'showReturnForm'])->name('user.gadget.returnForm');
 
 // Process the return gadget request (POST)
+Route::post('/gadgets/return', [GadgetController::class, 'returnGadget'])->name('gadget.return');
+// Process the return gadget request (GET)
+Route::get('/gadgets/return', [GadgetController::class, 'returnGadget'])->name('gadget.return');
 Route::post('/user/gadget/return', [GadgetController::class, 'returnGadget'])->name('user.gadget.return');
 // Report Gadget Issue
 Route::post('/user/gadget/report', [GadgetController::class, 'reportIssue'])->name('user.gadget.report');
@@ -311,6 +291,19 @@ Route::post('/admin/assign-gadget/{id}', [AdminController::class, 'storeAssigned
 //Route::middleware('auth')->group(function () {
    // Route::resource('gadgets', GadgetController::class);
 //});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('manager_/manager-requests', [AdminController::class, 'managerRequests'])->name('managerRequests');
+    Route::get('/approve-request/{id}', [AdminController::class, 'approveRequest'])->name('approveRequest');
+    Route::get('/reject-request/{id}', [AdminController::class, 'rejectRequest'])->name('rejectRequest');
+});
+
+
+Route::get('/manager/employees', [ManagerController::class, 'employees'])->name('manager.employees');
+Route::prefix('manager')->name('manager.')->group(function () {
+    Route::get('/employees', [ManagerController::class, 'employees'])->name('viewEmployees');
+});
+
+Route::get('/user/details/{id}', [UserController::class, 'showDetails'])->name('user.details');
 
 
 // Home Route (Optional)

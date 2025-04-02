@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Gadget;
 use App\Models\Allocation;
 use App\Models\Issue;
+use App\Models\ManagerRequest;
 
 
 //use Illuminate\Http\Request;
@@ -464,15 +465,13 @@ public function showUserRequests($id)
     return view('admin.user-requests', compact('user', 'requests'));
 }
 
-
 public function managerRequests()
 {
-    $gadgets = GadgetRequest::whereHas('user', function($query) {
-        $query->where('role', 'manager');
-    })->get();
+    $managerRequests = GadgetRequest::with(['gadget', 'user'])->get(); // Fetch requests with related gadget and user
 
-    return view('admin.manager_requests.manager_requests', compact('gadgets'));
+    return view('admin.manager_requests.manager_requests', compact('managerRequests'));
 }
+
 
 
 
