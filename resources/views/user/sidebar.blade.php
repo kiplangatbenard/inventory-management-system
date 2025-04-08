@@ -6,7 +6,7 @@
     <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-            <a href="{#}">View Details</a>
+            <a href="{{ route('user.details', ['id' => auth()->id()]) }}">View My Details</a>
             </li>
             <li class="nav-item">
                     <i class="fas fa-user me-2"></i> User Details
@@ -18,12 +18,12 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('user.gadget.report') }}" class="nav-link text-light">
+                <a href="{{ route('user.issues.index') }}" class="nav-link text-light">
                     <i class="fas fa-exclamation-circle me-2"></i> Report Issues
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('user.gadget.return') }}" class="nav-link text-light">
+                <a href="{{ route('user.returns.create') }}" class="nav-link text-light">
                     <i class="fas fa-sync-alt me-2"></i> Request Return
                 </a>
             </li>
@@ -34,11 +34,12 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a href="{{ route('logout') }}" class="nav-link text-danger">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </a>
-            </li>
+<form id="logout-form" action="{{ route('logout') }}" method="POST">
+    @csrf
+    @method('POST')
+    <button type="submit">Logout</button>
+</form>
+
         </ul>
     </div>
 </nav>

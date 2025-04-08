@@ -22,6 +22,7 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // Authentication Routes (Provided by Laravel Auth)
 Auth::routes();
+//Auth::routes(['reset' => true]);  // This will generate the reset routes
 
 // Fallback Route
 Route::get('/fallback', function () {
@@ -41,7 +42,6 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::get('/admin/pending-requests/{id}', [AdminController::class, 'showPendingRequest'])->name('admin.pendingRequest');
     Route::post('/admin/pending-requests/{id}/approve', [AdminController::class, 'approvePendingRequest'])->name('admin.approvePendingRequest');
     Route::post('/admin/pending-requests/{id}/reject', [AdminController::class, 'rejectPendingRequest'])->name('admin.rejectPendingRequest');
-    Route::post('/admin/pending-requests/{id}/cancel', [AdminController::class, 'cancelPendingRequest'])->name('admin.cancelPendingRequest');
     Route::post('/admin/pending-requests/{id}/return', [AdminController::class, 'returnPendingRequest'])->name('admin.returnPendingRequest');
     Route::post('/admin/pending-requests/{id}/report-issue', [AdminController::class, 'reportIssue'])->name('admin.reportIssue');
     Route::get('/admin/departments', [AdminController::class, 'viewDepartments'])->name('admin.viewDepartments');
@@ -73,7 +73,6 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::get('/admin/requests/{id}', [AdminController::class, 'viewRequest'])->name('admin.viewRequest');
     Route::post('/admin/requests/{id}/approve', [AdminController::class, 'approveRequest'])->name('admin.approveRequest');
     Route::post('/admin/requests/{id}/reject', [AdminController::class, 'rejectRequest'])->name('admin.rejectRequest');
-    Route::post('/admin/requests/{id}/cancel', [AdminController::class, 'cancelRequest'])->name('admin.cancelRequest');
     Route::post('/admin/requests/{id}/return', [AdminController::class, 'returnRequest'])->name('admin.returnRequest');
     Route::post('/admin/requests/{id}/report-issue', [AdminController::class, 'reportIssue'])->name('admin.reportIssue');
     Route::get('/admin/departments', [AdminController::class, 'viewDepartments'])->name('admin.viewDepartments');
@@ -83,33 +82,34 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::get('/admin/roles', [AdminController::class, 'viewRoles'])->name('admin.viewRoles');
     Route::post('/admin/process-assignment/{id}', [AdminController::class, 'processAssignment'])->name('admin.processAssignment');
     Route::post('/admin/process-return/{id}', [AdminController::class, 'processReturn'])->name('admin.processReturn');
-    Route::post('/admin/employees/{id}/approve-gadget', [AdminController::class, 'approveGadget'])->name('admin.approveGadget');
-    Route::post('/admin/employees/{id}/reject-gadget', [AdminController::class, 'rejectGadget'])->name('admin.rejectGadget');
-    Route::post('/admin/employees/{id}/cancel-gadget', [AdminController::class, 'cancelGadget'])->name('admin.cancelGadget');
-    Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-    Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-    Route::get('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/assign-gadget', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
-    Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
-   // Route::post('/admin/employees/{id}/return-gadget', [AdminController::class, 'returnGadget'])->name('admin.returnGadget');
+    
    Route::get('/admin/assign-gadget/{id}', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
    Route::post('/admin/process-assignment/{id}', [AdminController::class, 'processAssignment'])->name('admin.processAssignment');
    
-   
+
+   //REPORTED ISSUES
+   Route::get('/admin/issues', [\App\Http\Controllers\GadgetIssueController::class, 'adminIndex'])->name('admin.issues.index');
+    Route::post('/admin/issues/{id}/update-status', [\App\Http\Controllers\GadgetIssueController::class, 'updateStatus'])->name('admin.issues.updateStatus');
+   //gadget return
+   Route::get('/admin/returns', [\App\Http\Controllers\GadgetReturnController::class, 'adminIndex'])->name('admin.returns.index');
+    Route::post('/admin/returns/{id}/update-status', [\App\Http\Controllers\GadgetReturnController::class, 'updateStatus'])->name('admin.returns.updateStatus');
     Route::get('/admin/pending-requests', [AdminController::class, 'pendingRequests'])->name('admin.pendingRequests');
     Route::get('/admin/assign-gadget/{id}', [AdminController::class, 'assignGadget'])->name('admin.assignGadget');
     Route::post('/admin/process-assignment/{id}', [AdminController::class, 'processAssignment'])->name('admin.processAssignment');
     Route::post('/admin/process-return/{id}', [AdminController::class, 'processReturn'])->name('admin.processReturn');
 
+    Route::patch('/admin/returns/{id}/approve', [\App\Http\Controllers\GadgetReturnController::class, 'approve'])->name('admin.returns.approve');
+    Route::patch('/admin/returns/{id}/reject', [\App\Http\Controllers\GadgetReturnController::class, 'reject'])->name('admin.returns.reject');
 
-    Route::post('user/requests/{id}/report-issue', [UserController::class, 'reportIssue'])->name('user.reportIssue');
-    
+    Route::patch('/admin/returns/{id}/approve', [\App\Http\Controllers\GadgetReturnController::class, 'approveReturn'])->name('admin.returns.approve');
+Route::patch('/admin/returns/{id}/reject', [\App\Http\Controllers\GadgetReturnController::class, 'rejectReturn'])->name('admin.returns.reject');
+
+
     Route::get('user/requests/{id}/return', [UserController::class, 'returnGadget'])->name('user.returnGadget');
     Route::post('/gadget/return/{id}', [GadgetController::class, 'returnGadget']);
     
-
+    Route::patch('admin/returns/{id}/approve', [\App\Http\Controllers\GadgetReturnController::class, 'approve'])->name('admin.returns.approve');
+    Route::patch('admin/returns/{id}/reject', [\App\Http\Controllers\GadgetReturnController::class, 'reject'])->name('admin.returns.reject');
     // Department Routes
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::get('/departments/{id}', [DepartmentController::class, 'show'])->name('departments.show');
@@ -128,7 +128,6 @@ Route::middleware(['auth', 'role.admin'])->group(function () {
     Route::post('/admin/requests/{id}/reject', [RequestController::class, 'reject'])->name('admin.requests.reject');
     Route::post('/admin/requests/{id}/cancel', [RequestController::class, 'cancel'])->name('admin.requests.cancel');
     Route::post('/admin/requests/{id}/return', [RequestController::class, 'returnGadget'])->name('admin.requests.return');
-    Route::post('/admin/requests/{id}/report-issue', [RequestController::class, 'reportIssue'])->name('admin.requests.reportIssue');
 
 
     Route::get('/admin/gadget-requests', [GadgetRequestController::class, 'adminIndex'])->name('admin.gadget_requests.index');
@@ -179,6 +178,8 @@ Route::middleware(['auth', 'role.manager'])->group(function () {
 
 Route::middleware(['auth', 'ensure.user.is.manager'])->group(function () {
     Route::get('/manager/dashboard', [DepartmentManagerController::class, 'dashboard'])->name('manager.dashboard');
+    Route::get('/manager/gadget-requests', [ManagerController::class, 'managerGadgetRequests'])->name('manager.gadget.requests');
+    Route::get('/manager/gadget-requests/{id}', [ManagerController::class, 'managerGadgetRequest'])->name('manager.gadget.request');
 });
 
 
@@ -195,11 +196,17 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 
+    //user requests return
+    Route::get('/user/return-request', [\App\Http\Controllers\GadgetReturnController::class, 'create'])->name('user.returns.create');
+    Route::post('/user/return-request', [\App\Http\Controllers\GadgetReturnController::class, 'store'])->name('user.returns.store');
+    Route::get('/user/return-requests', [\App\Http\Controllers\GadgetReturnController::class, 'index'])->name('user.returns.index');
+    
+    Route::get('/user/gadget/details', [UserController::class, 'showDetails'])->name('user.gadget.details');
+
     // Gadget Requests
     Route::post('/gadget/return', [GadgetController::class, 'return'])->name('gadget.return');
 
-    //Route::get('/user/request-gadget', [UserController::class, 'showRequestForm'])->name('user.requestGadgetForm');
-    //Route::post('/user/request-gadget', [UserController::class, 'requestGadget'])->name('user.requestGadget');
+    
     Route::get('/gadget-requests', [GadgetRequestController::class, 'index'])->name('user.gadget_requests.index');
     Route::get('/gadget-requests/create', [GadgetRequestController::class, 'create'])->name('user.gadget_requests.create');
     Route::post('/gadget-requests', [GadgetRequestController::class, 'store'])->name('user.gadget_requests.store');
@@ -258,6 +265,7 @@ Route::get('/user/gadgets', [GadgetController::class, 'viewAssignedGadgets'])->n
     Route::get('/user/notifications/{id}', [UserController::class, 'viewNotification'])->name('user.viewNotification');
     Route::post('/gadgets/return/{id}', [GadgetController::class, 'returnGadget'])
     ->name('gadget.return');
+    
     Route::get('/gadgets/return/{id}', [GadgetController::class, 'returnGadget']);
     // Departments
     Route::get('/user/departments', [UserController::class, 'viewDepartments'])->name('user.viewDepartments');
@@ -278,6 +286,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/gadgets/{id}/edit', [GadgetController::class, 'edit'])->name('gadgets.edit');
     Route::put('/gadgets/{id}', [GadgetController::class, 'update'])->name('gadgets.update');
     Route::delete('/gadgets/{id}', [GadgetController::class, 'destroy'])->name('gadgets.destroy');
+
+
+    // Gadget Report issue
+    
+    // Show the form to report an issue (select a gadget)
+    Route::get('/user/report-issue', [\App\Http\Controllers\GadgetIssueController::class, 'create'])->name('user.issues.create');
+    
+    // Store the reported issue
+    Route::post('/user/report-issue', [\App\Http\Controllers\GadgetIssueController::class, 'store'])->name('user.issues.store');
+    
+    Route::get('/user/issues', [\App\Http\Controllers\GadgetIssueController::class, 'index'])->name('user.issues.index');
 
 });
 
@@ -307,4 +326,7 @@ Route::get('/user/details/{id}', [UserController::class, 'showDetails'])->name('
 
 
 // Home Route (Optional)
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes();
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

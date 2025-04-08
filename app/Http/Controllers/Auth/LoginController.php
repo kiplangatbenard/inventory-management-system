@@ -3,43 +3,38 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
     /**
-     * The user has been authenticated.
+     * Override the redirectTo method to send users to different dashboards
+     * based on their role.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
+     * @return string
      */
-    protected function authenticated(Request $request, $user)
+    protected function redirectTo()
     {
-        // Redirect users based on their role
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'manager') {
-            return redirect()->route('manager.dashboard');
-        } elseif ($user->role === 'user') {
-            return redirect()->route('user.dashboard');
-        }
+        $role = Auth::user()->role; // Assuming you have a 'role' column in users table
 
-        // Default redirect for other roles
-        return redirect()->route('home');
+        switch ($role) {
+            case 'admin':
+                return '/admin/dashboard';
+            case 'manager':
+                return '/manager/dashboard';
+            case 'user':
+                return '/user/dashboard';
+            default:
+                return '/home'; // fallback
+        }
     }
 
-    /**
-     * Show the application's login form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showLoginForm()
+    public function __construct()
     {
-        return view('auth.login');
+        $this->middleware('guest')->except('logout');
+        $this->middleware('auth')->only('logout');
     }
 }

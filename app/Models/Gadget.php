@@ -48,5 +48,12 @@ public function department()
 {
     return $this->belongsTo(Department::class);
 }
+// app/Models/Gadget.php
+
+public function returnRequest()
+{
+    return $this->hasOne(GadgetReturn::class, 'gadget_id');
+}
+
 
 }

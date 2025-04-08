@@ -2,6 +2,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Request;
+use App\Models\Gadget;
+use App\Models\GadgetReturn;
+use App\Models\GadgetRequest;
+use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 
 class RequestController extends Controller
@@ -83,4 +87,18 @@ class RequestController extends Controller
         return response()->json(null, 204);
     }
     
+    public function approve($id)
+{
+    $return = GadgetRequest::findOrFail($id);
+    
+    // Only allow if status is still pending
+    if ($return->status === 'Pending') {
+        $return->status = 'Approved';
+        $return->save();
+
+        return redirect()->back()->with('success', 'Return request approved successfully.');
+    }
+
+    return redirect()->back()->with('success', 'Return request is already processed.');
+}
 }

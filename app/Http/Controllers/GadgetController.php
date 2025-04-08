@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Gadget;
 use App\Models\GadgetRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Issue; 
 use Illuminate\Support\Facades\DB;
+
 
 
 class GadgetController extends Controller
@@ -15,7 +15,7 @@ class GadgetController extends Controller
     // Display a listing of gadgets
     public function index()
     {
-        $gadgets = GadgetRequest::all();
+        $gadgets = Gadget::all();
         return view('gadgets.index', compact('gadgets'));
     }
 
@@ -241,6 +241,8 @@ public function assignGadget(Request $request)
 
     return redirect()->back()->with('success', 'Gadget assigned successfully.');
 }
+
+
 
 
 

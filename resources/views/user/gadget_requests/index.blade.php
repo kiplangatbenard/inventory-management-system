@@ -14,11 +14,11 @@
 </style>
 
 <div class="container mt-4">
-    <a href="{{ url()->previous() }}" class="btn btn-light mb-3">
+    <a href="{{route('user.dashboard')}}" class="btn btn-light mb-3">
         <i class="bi bi-arrow-left"></i> Back
     </a>
 
-    <h2 class="mb-4"><i class="bi bi-clipboard-list"></i> My Gadget Requests</h2>
+    <h2 class="mb-4"><i class="bi bi-clipboard-list"></i> My Gadget Requests </h2>
 
     <a href="{{ route('user.gadget_requests.create') }}" class="btn btn-primary mb-3">
         <i class="bi bi-plus-circle"></i> Request a Gadget

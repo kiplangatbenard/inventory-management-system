@@ -11,12 +11,6 @@ use App\Models\Allocation;
 use App\Models\Issue;
 use App\Models\ManagerRequest;
 
-
-//use Illuminate\Http\Request;
-//use App\Models\Gadget; // Import Gadget model
-//use App\Models\User;   // Import User model
-//use App\Models\GadgetRequest; // Import GadgetRequest model
-//use App\Models\GadgetReturnRequest; // Import GadgetReturnRequest model
 use App\Models\GadgetReturnRequest as GadgetReturnRequestModel; // Alias for GadgetReturnRequest model
 use App\Models\Report; // Import Report model
 use Illuminate\Support\Facades\DB; // Import DB facade
@@ -43,7 +37,7 @@ class AdminController extends Controller
     $allocatedGadgets = Gadget::whereNotNull('assigned_to')->count();
     $returnRequests = GadgetReturnRequest::where('status', 'pending')->with(['user', 'gadget'])->get();
     $pendingRequestsCount = GadgetRequest::where('status', 'pending')->count();
-    $allocatedGadgets = GadgetRequest::where('status', 'assigned')->count();
+    $allocatedGadgets = GadgetRequest::where('status', 'approved')->count();
     $gadgetUsage = Gadget::select('type', DB::raw('count(*) as total'))
                         ->groupBy('type')
                         ->pluck('total', 'type');
@@ -104,21 +98,9 @@ public function approveRequest($id)
 
     return redirect()->back()->with('success', 'Request approved successfully.');
 }
-/*public function assignGadget($id)
+public function assignGadget(Request $request)
 {
-    $user = User::find($id);
-    if (!$user) {
-        return redirect()->back()->with('error', 'User not found.');
-    }
-
-    $pendingRequests = GadgetRequest::where('user_id', $id)->where('status', 'pending')->get();
-    $gadgets = Gadget::where('status', 'available')->get(); 
-
-    return view('admin.assignGadget', compact('user', 'pendingRequests', 'gadgets'));
-}
-*/public function assignGadget(Request $request)
-{
-    $gadgetId = $request->input('gadget_id');
+   /*$gadgetId = $request->input('gadget_id');
     $userId = $request->input('user_id');
 
     // Check if the gadget is already assigned
@@ -130,6 +112,21 @@ public function approveRequest($id)
     if ($existingAssignment) {
         return redirect()->back()->with('error', 'Gadget is already assigned and not available.');
     }
+    
+*/
+
+// Get the selected gadget
+$gadget = Gadget::find($request->gadget_id);
+ $userId = $request->input('user_id');
+ $gadgetId = $request->input('gadget_id');
+// Check if a gadget with the same serial number is already assigned
+$existing = Allocation::whereHas('gadget', function ($query) use ($gadget) {
+    $query->where('serial_number', $gadget->serial_number);
+})->where('status', 'assigned')->first();
+
+if ($existing) {
+    return redirect()->back()->with('error', 'A gadget with this serial number is already assigned.');
+}
 
     // Assign gadget
     DB::table('gadget_assignments')->insert([

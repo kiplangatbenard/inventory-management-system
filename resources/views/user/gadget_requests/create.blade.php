@@ -14,7 +14,7 @@
 </style>
 
 <div class="container mt-4">
-    <a href="{{ url()->previous() }}" class="btn btn-light mb-3">
+    <a href="{{route('user.dashboard')}}" class="btn btn-light mb-3">
         <i class="bi bi-arrow-left"></i> Back
     </a>
 
@@ -38,10 +38,18 @@
                 <div class="mb-3">
                     <label for="gadget_id" class="form-label"><i class="bi bi-box"></i> Select Gadget:</label>
                     <select name="gadget_id" id="gadget_id" class="form-select" required>
-                        @foreach ($gadgets as $gadget)
-                            <option value="{{ $gadget->id }}">{{ $gadget->name }}</option>
-                        @endforeach
-                    </select>
+    @foreach ($gadgets as $type => $groupedGadgets)
+        <optgroup label="{{ $type }}">
+            @foreach ($groupedGadgets as $gadget)
+                <option value="{{ $gadget->id }}">{{ $gadget->name }} ({{ $gadget->serial_number ?? 'No Serial' }})</option>
+            @endforeach
+        </optgroup>
+    @endforeach
+</select>
+@if ($gadgets->isEmpty())
+    <option disabled>No gadgets available</option>
+@endif
+
                 </div>
 
                 <div class="mb-3">

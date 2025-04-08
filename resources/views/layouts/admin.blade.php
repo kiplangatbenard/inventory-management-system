@@ -87,11 +87,9 @@
     <a href="{{ route('departments.index') }}"><i class="bi bi-envelope"></i> Department</a>
     <a href="{{ route('user.index') }}"><i class="bi bi-person"></i> Employees</a>
     <a href="{{ route('admin.gadget_requests.index') }}"><i class="bi bi-journal-plus"></i> Gadget Requests</a>
-    <a href="{{ route('admin.return.requests') }}"><i class="fas fa-sync-alt"></i> Manage Returns</a>
-    <a href="{{ route('admin.issues') }}"><i class="fas fa-exclamation-triangle"></i> View Reported Issues</a>
-    <a class="nav-link" href="{{ route('admin.manager_requests.manager.requests') }}">Manager Requests</a>
-    <a class="nav-link" href="{{ route('admin.manager_requests.manager.allocations') }}">Manager Allocations</a>
-    <a class="nav-link" href="{{ route('admin.manager_requests.manager.issues') }}">Manager Issues</a>
+    <a href="{{ route('admin.returns.index') }}"><i class="fas fa-sync-alt"></i> Manage Returns</a>
+    <a href="{{ route('admin.issues.index') }}"><i class="fas fa-exclamation-triangle"></i> View Reported Issues</a>
+
     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="bi bi-box-arrow-right"></i> Logout
     </a>

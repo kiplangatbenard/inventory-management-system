@@ -74,7 +74,7 @@ class GadgetRequestController extends Controller
     }
     public function create()
 {
-    $gadgets = Gadget::all(); // Fetch available gadgets
+    $gadgets = Gadget::where('status', 'Available')->get()->groupBy('type');
     return view('user.gadget_requests.create', compact('gadgets'));
 }
 public function store(Request $request)
